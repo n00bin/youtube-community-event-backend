@@ -10,7 +10,7 @@ main_routes = Blueprint('main_routes', __name__)
 
 @main_routes.route('/')
 def index():
-    return "Welcome to the YouTube Community Event App!"
+    return jsonify({"message": "Welcome to the YouTube Community Event App!"})
 
 def setup_routes(app):
     @app.route('/state', methods=['GET'])
