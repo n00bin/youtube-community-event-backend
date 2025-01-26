@@ -32,11 +32,17 @@ CORS(app, supports_credentials=True, resources={
     }
 })
 
-# Add CORS logging
 @app.after_request
-def log_cors(response):
-    print(f"Origin: {request.headers.get('Origin')}")
-    print(f"Access-Control-Allow-Origin: {response.headers.get('Access-Control-Allow-Origin')}")
+def apply_cors_headers(response):
+    origin = request.headers.get('Origin')
+    allowed_origins = ["https://youtube-frontend-one-sigma.vercel.app"]
+
+    if origin in allowed_origins:
+        response.headers.add("Access-Control-Allow-Origin", origin)
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
     return response
 
 # Initialize the database
