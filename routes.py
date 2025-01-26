@@ -198,34 +198,22 @@ def setup_routes(app):
             for job in jobs
         ])
 
-    @app.route('/login', methods=['GET', 'POST'])
-    def login():
-        if request.method == 'GET':
-            return jsonify({"message": "Login endpoint for admin dashboard"})
-
-        if request.method == 'POST':
-            data = request.json
-            username = data.get("username")
-            password = data.get("password")
-
-            user = User.query.filter_by(username=username).first()
-            if not user or not check_password_hash(user.password, password):
-                return jsonify({"message": "Invalid username or password"}), 401
-
-            login_user(user)
-            return jsonify({"message": "Login successful"}), 200
-
     @main_routes.route('/admin', methods=['GET'])
     @login_required
     def admin_dashboard():
         """Admin-only route."""
-        if not current_user.is_admin:
+        if not session.get('admin'):  # Ensure session has the admin flag
             return jsonify({"message": "Unauthorized"}), 403
 
         # Return admin-specific data
         return jsonify({"message": "Welcome to the admin dashboard!"})
 
+    @main_routes.route('/admin', methods=['GET'])
+    @login_required
+    def admin_dashboard():
+        """Admin-only route."""
+        if not session.get('admin'):  # Ensure session has the admin flag
+            return jsonify({"message": "Unauthorized"}), 403
 
-
-
-
+        # Return admin-specific data
+        return jsonify({"message": "Welcome to the admin dashboard!"})
