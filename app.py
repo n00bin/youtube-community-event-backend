@@ -14,7 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)  # The app object must be defined first
-CORS(app)
+CORS(app, supports_credentials=True, origins=["https://youtube-frontend-one-sigma.vercel.app"])
 
 # Set the secret key for the application (use a secure random value)
 app.secret_key = "n00bin"
