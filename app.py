@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask
+from flask import Flask, request
 from db import db
 from state import set_suggestions_open, set_poll_open, suggestionsOpen, pollOpen
 import atexit
@@ -23,7 +23,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "n00bin"
 
 # Enable CORS with credentials
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://youtube-frontend-one-sigma.vercel.app"}})
+from flask_cors import CORS
+
+CORS(app, supports_credentials=True, resources={
+    r"/*": {"origins": "https://youtube-frontend-one-sigma.vercel.app"}
+})
+
+# Add CORS logging
+@app.after_request
+def log_cors(response):
+    print(f"Origin: {request.headers.get('Origin')}")
+    print(f"Access-Control-Allow-Origin: {response.headers.get('Access-Control-Allow-Origin')}")
+    return response
 
 # Initialize the database
 db.init_app(app)
