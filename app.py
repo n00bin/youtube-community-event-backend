@@ -23,7 +23,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "n00bin"
 
 # Enable CORS with credentials
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://youtube-frontend-one-sigma.vercel.app"}})
 
 # Initialize the database
 db.init_app(app)
