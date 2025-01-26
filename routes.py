@@ -198,24 +198,22 @@ def setup_routes(app):
             for job in jobs
         ])
 
-    @app.route('/login', methods=['POST'])
+    @app.route('/login', methods=['GET', 'POST'])
     def login():
-        data = request.json
-        print("Login Request Data:", data)  # Debugging
-        username = data.get("username")
-        password = data.get("password")
-        print(f"Received username: {username}, password: {password}")
+        if request.method == 'GET':
+            return jsonify({"message": "Login endpoint for admin dashboard"})
 
-        user = User.query.filter_by(username=username).first()
-        if not user or not check_password_hash(user.password, password):
-            return jsonify({"message": "Invalid username or password"}), 401
+        if request.method == 'POST':
+            data = request.json
+            username = data.get("username")
+            password = data.get("password")
 
-        if user.is_admin:
+            user = User.query.filter_by(username=username).first()
+            if not user or not check_password_hash(user.password, password):
+                return jsonify({"message": "Invalid username or password"}), 401
+
             login_user(user)
-            session['admin'] = True
-            return jsonify({"message": "Admin login successful"}), 200
-        else:
-            return jsonify({"message": "Unauthorized"}), 403
+            return jsonify({"message": "Login successful"}), 200
 
     @main_routes.route('/admin', methods=['GET'])
     @login_required
