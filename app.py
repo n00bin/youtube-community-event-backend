@@ -2,7 +2,6 @@ import calendar
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
-from flask_cors import CORS
 from db import db
 from state import set_suggestions_open, set_poll_open, suggestionsOpen, pollOpen
 import atexit
@@ -11,17 +10,20 @@ from models import PollSuggestion, Winner, Suggestion
 from routes import setup_routes, main_routes
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_cors import CORS  # Import CORS
+from models import db  # Your database setup
 
 app = Flask(__name__)  # The app object must be defined first
-CORS(app, supports_credentials=True)
-
-# Set the secret key for the application (use a secure random value)
-app.secret_key = "n00bin"
 
 # Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///suggestions.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Set the secret key for the application (use a secure random value)
+app.secret_key = "n00bin"
+
+# Enable CORS with credentials
+CORS(app, supports_credentials=True)
 
 # Initialize the database
 db.init_app(app)
