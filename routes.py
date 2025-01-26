@@ -207,13 +207,3 @@ def setup_routes(app):
 
         # Return admin-specific data
         return jsonify({"message": "Welcome to the admin dashboard!"})
-
-    @main_routes.route('/admin', methods=['GET'])
-    @login_required
-    def admin_dashboard():
-        """Admin-only route."""
-        if not session.get('admin'):  # Ensure session has the admin flag
-            return jsonify({"message": "Unauthorized"}), 403
-
-        # Return admin-specific data
-        return jsonify({"message": "Welcome to the admin dashboard!"})
