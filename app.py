@@ -1,16 +1,12 @@
 import calendar
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request
-from db import db
+from flask import Flask, jsonify, request
 from state import set_suggestions_open, set_poll_open, suggestionsOpen, pollOpen
 import atexit
 from flask_migrate import Migrate
 from models import PollSuggestion, Winner, Suggestion
 from routes import setup_routes, main_routes
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_cors import CORS  # Import CORS
 from models import db  # Your database setup
 
 app = Flask(__name__)  # The app object must be defined first
@@ -32,17 +28,31 @@ CORS(app, supports_credentials=True, resources={
     }
 })
 
+# Add CORS handling logic
 @app.after_request
-def apply_cors_headers(response):
+def apply_cors(response):
+    allowed_origins = [
+        "https://youtube-frontend-one-sigma.vercel.app",
+        "https://youtube-frontend-git-main-n00bins-projects.vercel.app",
+        "https://youtube-frontend-4vzxzf7cd-n00bins-projects.vercel.app"
+    ]
     origin = request.headers.get('Origin')
-    allowed_origins = ["https://youtube-frontend-one-sigma.vercel.app"]
-
     if origin in allowed_origins:
         response.headers.add("Access-Control-Allow-Origin", origin)
         response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
+    return response
+
+# Handle OPTIONS requests
+@app.route('/<path:path>', methods=['OPTIONS'])
+def handle_options(path):
+    response = jsonify()
+    response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
 
 # Initialize the database
