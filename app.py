@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from models import PollSuggestion, Winner, Suggestion
 from routes import setup_routes, main_routes
 from models import db  # Your database setup
+from flask_cors import CORS
 
 app = Flask(__name__)  # The app object must be defined first
 
@@ -22,7 +23,7 @@ app.secret_key = "n00bin"
 from flask_cors import CORS
 
 # Allow CORS for specific origins
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": ["http://localhost:3001", "https://youtube-frontend-one-sigma.vercel.app"]}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": ["https://youtube-frontend-one-sigma.vercel.app"]}})
 
 # Add CORS handling logic
 @app.after_request
