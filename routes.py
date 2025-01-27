@@ -230,12 +230,3 @@ def setup_routes(app):
 
         # Return admin-specific data
         return jsonify({"message": "Welcome to the admin dashboard!"})
-
-    @app.route('/<path:path>', methods=['OPTIONS'])
-    def handle_options(path):
-        response = jsonify()
-        response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
-        response.headers.add("Access-Control-Allow-Credentials", "true")
-        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        return response
