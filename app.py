@@ -21,7 +21,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "n00bin"
 
 # Allow CORS for specific origins
-CORS(app, origins=["https://youtube-frontend-ke3uzemec-n00bins-projects.vercel.app"], supports_credentials=True)
+# Add this after creating your Flask app instance
+CORS(app, resources={r"/*": {"origins": [
+    "https://youtube-frontend-one-sigma.vercel.app",
+    "https://youtube-frontend-git-main-n00bins-projects.vercel.app",
+    "https://youtube-frontend-ho9bbjuwk-n00bins-projects.vercel.app"
+]}}, supports_credentials=True)
 
 # Add CORS handling logic
 @app.after_request
