@@ -230,3 +230,13 @@ def setup_routes(app):
 
         # Return admin-specific data
         return jsonify({"message": "Welcome to the admin dashboard!"})
+
+    @app.route('/debug/suggestions', methods=['GET'])
+    def debug_suggestions():
+        from models import Suggestion
+        try:
+            suggestions = Suggestion.query.all()
+            return jsonify([{"id": s.id, "title": s.title, "votes": s.votes} for s in suggestions])
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
