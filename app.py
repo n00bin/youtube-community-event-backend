@@ -21,7 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "n00bin"
 
 # Allow CORS for specific origins
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": ["https://youtube-frontend-one-sigma.vercel.app"]}})
+CORS(app, origins=["https://youtube-frontend-ke3uzemec-n00bins-projects.vercel.app"], supports_credentials=True)
 
 # Add CORS handling logic
 @app.after_request
