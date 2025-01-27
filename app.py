@@ -21,12 +21,8 @@ app.secret_key = "n00bin"
 # Enable CORS with credentials
 from flask_cors import CORS
 
-# Add CORS configuration
-CORS(app, supports_credentials=True, resources={
-    r"/*": {
-        "origins": ["https://youtube-frontend-one-sigma.vercel.app"]
-    }
-})
+# Allow CORS for specific origins
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": ["http://localhost:3001", "https://youtube-frontend-one-sigma.vercel.app"]}})
 
 # Add CORS handling logic
 @app.after_request
