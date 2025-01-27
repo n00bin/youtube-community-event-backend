@@ -63,13 +63,12 @@ def setup_routes(app):
 
     @app.route('/suggestions', methods=['GET'])
     def get_suggestions():
+        print("Fetching suggestions...")  # Debug log
         try:
             suggestions = Suggestion.query.order_by(Suggestion.votes.desc()).all()
-            return jsonify([
-                {"id": s.id, "title": s.title, "votes": s.votes, "created_at": s.created_at.isoformat()}
-                for s in suggestions
-            ])
+            return jsonify([{"id": s.id, "title": s.title, "votes": s.votes} for s in suggestions])
         except Exception as e:
+            app.logger.error(f"Error fetching suggestions: {e}")
             return jsonify({"error": str(e)}), 500
 
     @app.route('/suggestions/<int:suggestion_id>/upvote', methods=['POST'])
